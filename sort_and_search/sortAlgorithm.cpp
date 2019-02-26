@@ -11,7 +11,7 @@ int main() {
     {10, 13, 14, 17, 24},
     {18, 21, 23, 26, 30}
     };
-    vector<int> nums = {1, 1, 1, 2, 2, 3};
+    vector<int> nums = {10,9,2,5,3,7,101,18};
     vector<int> result;
     // result = topKFrequent(nums, 3);
     // result = searchRange(nums, 9);
@@ -19,6 +19,8 @@ int main() {
     // vector<Interval> input = {Interval(1, 3), Interval(2, 6), Interval(8, 10), Interval(15, 18)};
     // merge(input);
     // cout<<search(nums, 3)<<endl;
-    cout<<searchMatrix(numbers, 5)<<endl;
+    int up = lengthOfLIS(nums);
+    cout<<up<<endl;
+    // cout<<searchMatrix(numbers, 5)<<endl;
     return 0;
 }

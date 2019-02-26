@@ -2,7 +2,7 @@
 #include<iostream>
 #include<algorithm>
 #include<vector>
-
+const int maxn = 99999, INF=-0x7f7f7f7f;
 using namespace std;
 vector<int> topKFrequent(vector<int>& nums, int k) {
     /*
@@ -195,4 +195,46 @@ bool searchMatrix(vector<vector<int>>& matrix, int target) {
             x++;
     }
     return false;
+}
+int find_first_large(vector<int>& nums, int target) {
+    // 找到数组中第一个大于目标的位置
+    int left = 0;
+    int right = nums.size() - 1;
+    while(left<=right) {
+        int mid = (left + right) / 2;
+        if(nums[mid]<target)
+        {            
+            left = mid + 1;
+        }
+        else
+        {
+            right = mid - 1;
+        }
+    }
+    return left;
+}
+
+int lengthOfLIS(vector<int>& nums) {
+    // 最大上升子序列，使用一个新的数组upnums存储最大上升子序列每序列的最小数字
+    int n = nums.size();
+    if(n<=1)
+        return n;
+    vector<int> dp(nums.size(), 1);
+    vector<int> upnums;
+    upnums.push_back(INF);
+    upnums.push_back(nums[0]);
+    for(int i=1;i<n;i++)
+    {   
+        if(nums[i]>upnums[dp[i-1]])
+        {
+            dp[i] = dp[i-1] + 1;
+            upnums.push_back(nums[i]);
+        }
+        else
+        {
+            dp[i] = dp[i-1];
+            upnums[find_first_large(upnums, nums[i])] = nums[i];
+        }
+    }
+    return dp[n-1];
 }

@@ -6,7 +6,7 @@
 using namespace std;
 vector<int> topKFrequent(vector<int>& nums, int k) {
     /*
-    前k个高频元素，题目地址https://leetcode-cn.com/explore/interview/card/top-interview-questions-medium/50/sorting-and-searching/97/
+    前k个高频元素，题目地址：https://leetcode-cn.com/explore/interview/card/top-interview-questions-medium/50/sorting-and-searching/97/
     */
     map<int, int> m;
     vector<vector<int>> top(nums.size()+1);
@@ -23,6 +23,24 @@ vector<int> topKFrequent(vector<int>& nums, int k) {
                 return res;
         }
     return res;
+}
+
+int findKthLargest(vector<int>& nums, int k) {
+    /*
+    数组中的第K大元素，题目地址：https://leetcode-cn.com/explore/interview/card/top-interview-questions-medium/50/sorting-and-searching/98/
+    */
+    if(k>nums.size())
+        return 0;
+    for(int i=nums.size()-1;i>=0;i--)
+    {
+        for(int j=0;j<i;j++)
+        {
+            if(nums[j]>nums[j+1])
+                swap(nums[j], nums[j+1]);
+        }
+        if(nums.size()-i == k)
+            return nums[i];
+    }
 }
 vector<int> searchRange1(vector<int>& nums, int target) {
     /*
@@ -130,6 +148,7 @@ vector<Interval> merge(vector<Interval>& Intervals){
 int search(vector<int>& nums, int target){
     /*
     搜索旋转排序数组
+    题目地址：https://leetcode-cn.com/explore/interview/card/top-interview-questions-medium/50/sorting-and-searching/102/
     */
     int left=0, right=nums.size()-1;
     int mid;

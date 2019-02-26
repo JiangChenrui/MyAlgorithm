@@ -11,7 +11,7 @@ int main() {
     {10, 13, 14, 17, 24},
     {18, 21, 23, 26, 30}
     };
-    vector<int> nums = {4, 5, 6, 7, 0, 1, 2};
+    vector<int> nums = {1, 1, 1, 2, 2, 3};
     vector<int> result;
     // result = topKFrequent(nums, 3);
     // result = searchRange(nums, 9);

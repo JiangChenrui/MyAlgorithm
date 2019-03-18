@@ -10,12 +10,12 @@ int main()
     srand(time(0));
     // 生成随机数，存入文本中
     ofstream fout;
-    string filename = "data.txt";
+    string filename = "data2.txt";
     fout.open(filename.c_str(), ios_base::out|ios_base::ate);
     if(!fout.is_open())
         return 0;
-    for(int i=0;i<1000000;i++){
-        fout<<rand()<<endl;
+    for(int i=0;i<100;i++){
+        fout<<rand()%10<<endl;
     }
     fout.close();
     // 读取随机数文件，读入数组a中

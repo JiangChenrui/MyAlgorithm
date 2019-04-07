@@ -2,6 +2,9 @@
 #include<vector>
 #include<algorithm>
 #include<cmath>
+#include<stack>
+#include<string.h>
+#include<queue>
 using namespace std;
 
 struct ListNode {
@@ -19,6 +22,25 @@ struct TreeNode {
         val(x), left(NULL), right(NULL){
     }
 };
+
+struct RandomListNode {
+    int label;
+    struct RandomListNode *next, *random;
+    RandomListNode(int x) :
+        label(x), next(NULL), random(NULL){
+    }
+};
+
+struct TreeLinkNode{
+    int val;
+    struct TreeLinkNode *left;
+    struct TreeLinkNode *right;
+    struct TreeLinkNode *next;
+    TreeLinkNode(int x) :val(x), left(NULL), right(NULL), next(NULL) {
+
+    }
+};
+
 class Solution{
 public:
     int NumberOf1(int n) {
@@ -212,38 +234,390 @@ public:
         return result;
     }
 
-    int findorder(vector<int> array, int num) {
-        for(int i=0;i<array.size();i++){
-            if(array[i] == num)
-                return i;
-        }
-    }
     bool IsPopOrder(vector<int> pushV, vector<int> popV) {
-        vector<int> number;
-        if(pushV.empty() || popV.empty())
+        // 判断序列是否是栈的弹出序列，想法是建一个栈，能够完全弹出栈就会为空，不能就为false
+        stack<int> s;
+        int len = pushV.size();
+        if(len==0)
             return false;
-        for(int i=0;i<pushV.size();i++){
-            number.push_back(findorder(pushV, popV[i]));
+        for(int i=0, j=0;i<len;i++){
+            s.push(pushV[i]);
+            while(j<len && s.top()==popV[j]){
+                s.pop();
+                j++;
+            }
         }
-        int max = number[0];
-        for(int i=1;i<number.size()-1;i++){
-            if(number[i]>max)
-                max = number[i];
-            if(number[i]<max && number[i]<number[i+1])
+        return s.empty();
+    }
+
+    vector<int> PrintFromTopToBottom(TreeNode* root) {
+        // 从上往下，从左到右打印二叉树。使用队列存储二叉树
+        vector<int> result;
+        queue<TreeNode*> q;
+        if(root==NULL)
+            return result;
+        q.push(root);
+        while(!q.empty()){
+            result.push_back(q.front()->val);
+            if(q.front()->left!=NULL)
+                q.push(q.front()->left);
+            if(q.front()->right!=NULL)
+                q.push(q.front()->right);
+            q.pop();
+        }        
+        return result;
+    }
+
+    bool judge(vector<int> array, int start, int end){
+        if(start >= end)
+            return true;
+        int mid = start;
+        while(array[mid] < array[end])
+            mid++;
+        for(int j=mid;j<end;j++){
+            if(array[j] < array[end])
+                return false;
+        }
+        return judge(array, start, mid-1) && judge(array, mid, end-1);
+    }
+    bool VerifySquenceOfBST(vector<int> sequence) {
+        // 二叉树的后序遍历序列，使用递归的方法，二分数组进行
+        int len = sequence.size();
+        if(len==0)
+            return false;
+        if(len==1)
+            return true;
+        return judge(sequence, 0, len-1);
+    }
+
+    void FindPath1(vector<vector<int>> &result, vector<int> &arr, TreeNode* root, int num){
+        if(root==NULL)
+            return;        
+        arr.push_back(root->val);
+        if(!root->left && !root->right && num-root->val == 0){
+            result.push_back(arr);
+        }
+        else if(num-root->val <0){
+            arr.pop_back();
+            return;
+        }
+        else if(num-root->val >0){
+            FindPath1(result, arr, root->left, num-root->val);
+            FindPath1(result, arr, root->right, num-root->val);
+        }
+        arr.pop_back();
+    }
+    vector<vector<int> > FindPath(TreeNode* root,int expectNumber) {
+        // 二叉树中和为某一值的路径，题目表述不清楚，必须是到树的底部
+        vector<vector<int>> result;
+        vector<int> arr;
+        if(root==NULL)
+            return result;
+        FindPath1(result, arr, root, expectNumber);
+        return result;
+    }
+
+    RandomListNode* Clone(RandomListNode* pHead){
+        // 复杂链表的复制
+        // 方法，将原列表复制，如将ABCD转换为AABBCCDD，将所有关系复制，然后分割
+        if(!pHead) return NULL;
+        RandomListNode *currNode = pHead;
+        while(currNode){
+            RandomListNode *node = new RandomListNode(currNode->label);
+            node->next = currNode->next;
+            currNode->next = node;
+            currNode = node->next;
+        }
+        currNode = pHead;
+        while(currNode){
+            RandomListNode *node = currNode->next;
+            if(currNode->random){
+                node->random = currNode->random->next;
+            }
+            currNode = node->next;
+        }
+        // 拆分
+        RandomListNode *pCloneHead = pHead->next;
+        RandomListNode *tmp;
+        currNode = pHead;
+        while(currNode->next){
+            tmp = currNode->next;
+            currNode->next = tmp->next;
+            currNode = tmp;
+        }
+        return pCloneHead;
+    }
+
+    TreeNode* Convert(TreeNode* pRootOfTree){
+        // 二叉搜索树与双向链，使用中序遍历解决，使用pre记录上次操作的节点，便于返回。
+        if(pRootOfTree==NULL)
+            return NULL;
+        TreeNode* pre = NULL;
+        ConvertHelp(pRootOfTree, pre);
+
+        TreeNode* res = pRootOfTree;
+        while(res->left){
+            res = res->left;
+        }
+        return res;
+    }   
+    void ConvertHelp(TreeNode* cur, TreeNode*& pre){
+        if(cur==NULL)
+            return;
+        
+        ConvertHelp(cur->left, pre);
+
+        cur->left = pre;
+        if(pre)
+            pre->right = cur;
+        pre = cur;
+
+        ConvertHelp(cur->right, pre);
+    }
+
+    vector<string> Permutation(string str){
+        // 字符串的排列
+        string end;
+        vector<string> result;
+        end.push_back(str.back());
+        str.pop_back();
+        PermutationHelp(str, end, result);
+    }
+    void PermutationHelp(string start, string end, vector<string> &res){
+        if(start.size()==1){
+            res.push_back(start+end);
         }
     }
+
+    bool duplicate(int numbers[], int length, int* duplication) {
+        // 数组中重复的数字
+        if(length<2)
+            return false;        
+        for(int i=0;i<length;){
+            if(numbers[i] == i){
+                i++;
+            }
+            else if(numbers[numbers[i]]!=numbers[i]){
+                int temp;
+                temp = numbers[numbers[i]];
+                numbers[numbers[i]] = numbers[i];
+                numbers[i] = temp;
+            }
+            else{
+                duplication[0] = numbers[i];
+                return true;
+            }                       
+        }
+        return false;
+    }   
+
+    void replaceSpace(char* str, int length){
+        // 替换空格
+        if(length<=0){
+            return;
+        }
+        int space_num=0;
+        for(int i=0;i<length;i++){
+            if(str[i]==' ')
+                space_num++;
+        }
+        length--;
+        int len = length + space_num*2;
+        while(length>=0){
+            if(str[length]==' '){
+                length--;
+                str[len--] = '0';
+                str[len--] = '2';
+                str[len--] = '%';
+            }
+            else{
+                str[len--] = str[length--];
+            }
+        }
+    }
+
+    vector<int> printListFromTailToHead(ListNode* head){
+        // 从尾到头打印链表
+        vector<int> result;
+        if(head==NULL){
+            return result;
+        }
+        // 使用栈实现
+        ListNode* node = head;
+        stack<int> s;
+        while(node!=NULL){
+            s.push(node->val);
+            node = node->next;
+        }
+        while(!s.empty()){
+            result.push_back(s.top());
+            s.pop();
+        }
+        return result;
+
+    }
+    // vector<int> result;
+    // vector<int> printListFromTailToHead(ListNode* head){
+    //     // 使用递归
+    //     ListNode* node = head;
+    //     if(node!=NULL){
+    //         if(node->next!=NULL)
+    //             printListFromTailToHead(node->next);
+    //         result.push_back(node->val);
+    //     }
+    //     return result;
+    // }
+
+    TreeNode* reConstructBinaryTree(vector<int> pre, vector<int> vin){
+        // 重建二叉树
+        TreeNode* head;
+        int len = pre.size();
+        if(len==0)
+            return NULL;
+        vector<int> left_pre, left_vin, right_pre, right_vin;
+        int node;
+        for(int i=0;i<len;i++){
+            if(pre[0] == vin[i]){
+                node == i;
+                break;
+            }
+        }
+        for(int i=0;i<node;i++){
+            left_pre.push_back(pre[i+1]);
+            left_vin.push_back(vin[i]);
+        }
+        for(int i=node+1;i<len;i++){
+            right_pre.push_back(pre[i]);
+            right_vin.push_back(vin[i]);
+        }
+        head->left = reConstructBinaryTree(left_pre, left_vin);
+        head->right = reConstructBinaryTree(right_pre, right_vin);
+        return head;
+    }
+
+    TreeLinkNode* GetNext(TreeLinkNode* pNode)
+    {
+        // 二叉树的下一个结点
+        TreeLinkNode* node;
+        if(pNode->right!=NULL){
+            node = pNode->right;
+            while(node->left){
+                node = node->left;
+            }
+            return node;
+        }
+        while(pNode->next!=NULL){
+            node = pNode->next;
+            if(node->left == pNode){
+                return node;
+            }
+            pNode = pNode->next;
+        }
+        return NULL;
+    }
+
+//     // 用两个栈实现队列
+//     void push(int node){
+//         stack1.push(node);
+//     }
+//     int pop(){
+//         int res;
+//         if(!stack2.empty()){
+//             res = stack2.top();
+//             stack2.pop();
+//             return res;
+//         }
+//         else{
+//             while(!stack1.empty()){
+//                 stack2.push(stack1.top());
+//                 stack1.pop();
+//             }
+//             res = stack2.top();
+//             stack2.pop();
+//             return res;
+//         }        
+//     }
+// private:
+//     stack<int> stack1;
+//     stack<int> stack2;
+
+    int Fibonacci(int n){
+        // 斐波那契数列
+        int f=0, g=1;
+        while(n--){
+            g += f;
+            f = g - f;
+        }
+        return f;
+    }
+
+    int minNumberInRotateArray(vector<int> rotateArray){
+        // 旋转数组
+        if(rotateArray.size()==0)
+            return 0;
+        int low=0, high=rotateArray.size()-1, mid;
+        while(low<high){
+            mid = (low + high) / 2;
+            if(rotateArray[mid]<=rotateArray[high])
+                high = mid;
+            else
+                low = mid + 1;
+        }
+        return rotateArray[low];
+    }
+
+    bool hasPath(char* matrix, int rows, int cols, char* str){
+        vector<bool> flag(rows*cols, false);
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                if(helper(matrix, rows, cols, i, j, str, 0, flag))
+                    return true;
+            }
+        }
+        return false;
+    }
+    bool helper(char* matrix, int rows, int cols, int i, int j, char* str, int k, vector<bool> flag){
+        int index = i * cols + j;
+        if(i<0 || j<0 || i>=rows || j>=cols || matrix[index]!=str[k] || flag[index]==true){
+            return false;
+        }
+        if(k == strlen(str) - 1) return true;
+        flag[index] = true;
+        if(helper(matrix, rows, cols, i-1, j, str, k+1, flag)
+        || helper(matrix, rows, cols, i+1, j, str, k+1, flag)
+        || helper(matrix, rows, cols, i, j-1, str, k+1, flag)
+        || helper(matrix, rows, cols, i, j+1, str, k+1, flag))
+            return true;
+        flag[index] = false;
+        return false;
+    }
+
+    
 };
+
+
 
 int main() {
     Solution S1;
     vector<int> num;
-    num = {2, 3, 4, 5, 6, 7};
-    vector<vector <int>> input;
-    input = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+    num = {2, 3, 1, 0, 2, 5};
+    char matrix[] = "ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS";  // 可赋值
+    // char *matrix = "ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS";  // 不可赋值
+    char str[]="SLHECCEIDEJFGGFIE";
+    // cout<<S1.hasPath(matrix, 5, 8, str)<<endl;
+    // int numbers[]={2, 1, 3, 0, 4};
+    // int *a;
+    // vector<vector <int>> input;
+    // input = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+    // cout<<S1.IsPopOrder({1, 2, 3, 4, 5}, {4, 3, 5, 1, 2})<<endl;
     // S1.printMatrix({{1},{3}});
     // cout<<S1.NumberOf1(12312)<<endl;
     // cout<<S1.Power(2.45465, 45)<<endl;
     // S1.reOrderArray(num);
+    // cout<<S1.duplicate(numbers, 5, a)<<' '<<a[0]<<endl;
+    // cout<<S1.VerifySquenceOfBST(num)<<endl;
+    // cout<<S1.Fibonacci(40)<<endl;
+
 
     return 0;
 }

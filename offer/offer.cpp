@@ -608,7 +608,6 @@ public:
         flag[index] = false;
         return false;
     }
-
     int movingCount(int threshold, int rows, int cols){
         // 机器人的运动范围
         vector<bool> flag(rows*cols, false);
@@ -660,9 +659,8 @@ public:
         // 打印从 1 到最大的 n 位数
         
     }
+
 };
-
-
 
 int main() {
     Solution S1;
@@ -688,4 +686,5 @@ int main() {
     cout<<S1.integerBreak(4)<<endl;
 
     return 0;
+
 }

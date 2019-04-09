@@ -103,6 +103,22 @@ public:
         return exponent>0? res:(1/res);
     }
 
+    double power2(double base, int exponent){
+        if(exponent==0)
+            return 1;
+        if(exponent==1)
+            return base;
+        bool isNegative = true;
+        if(exponent<0){
+            exponent = -exponent;
+            isNegative = false;
+        }
+        double pow = Power(base*base, exponent/2);
+        if(exponent%2!=0)
+            pow *= base;
+        return isNegative? pow:(1/pow);
+    }
+
     void reOrderArray(vector<int> &array) {
         // 调整数组顺序使奇数位于偶数
         vector<int> even; // 存储偶数
@@ -567,6 +583,7 @@ public:
     }
 
     bool hasPath(char* matrix, int rows, int cols, char* str){
+        // 矩阵中的路径
         vector<bool> flag(rows*cols, false);
         for(int i=0;i<rows;i++){
             for(int j=0;j<cols;j++){
@@ -592,7 +609,57 @@ public:
         return false;
     }
 
-    
+    int movingCount(int threshold, int rows, int cols){
+        // 机器人的运动范围
+        vector<bool> flag(rows*cols, false);
+        return moving(rows, cols, 0, 0, flag, threshold);
+    }   
+    int moving(int rows, int cols, int i, int j, vector<bool> &flag, int threshold){
+        // 传入引用，否则会使更改不能生效
+        int index = i * cols + j;
+        int sum = compute_sum(i, j);
+        if(i<0 || j<0 || i>=rows || j>=cols || flag[index]==true || sum>threshold){
+            return 0;
+        }
+        flag[index] = true;
+        return moving(rows, cols, i-1, j, flag, threshold)
+            + moving(rows, cols, i+1, j, flag, threshold)
+            + moving(rows, cols, i, j-1, flag, threshold)
+            + moving(rows, cols, i, j+1, flag, threshold)
+            + 1;
+    }
+    int compute_sum(int i, int j){
+        int sum=0;
+        while(i>0){
+            sum += i%10;
+            i = i/10;
+        }
+        while(j>0){
+            sum += j%10;
+            j = j/10;
+        }
+        return sum;
+    }
+
+    int integerBreak(int n){
+        // 整数拆分
+        int result = 1;
+        if(n<3){
+            return 1;
+        }
+        if(n==3)
+            return 2;
+        while(n>4){
+            result *= 3;
+            n -= 3;
+        }
+        return n*result;
+    }
+
+    void printToMaxOfNDigits(int n){
+        // 打印从 1 到最大的 n 位数
+        
+    }
 };
 
 
@@ -617,7 +684,8 @@ int main() {
     // cout<<S1.duplicate(numbers, 5, a)<<' '<<a[0]<<endl;
     // cout<<S1.VerifySquenceOfBST(num)<<endl;
     // cout<<S1.Fibonacci(40)<<endl;
-
+    // cout<<S1.movingCount(9, 5, 5)<<endl;
+    cout<<S1.integerBreak(4)<<endl;
 
     return 0;
 }

@@ -375,19 +375,19 @@ public:
         ConvertHelp(cur->right, pre);
     }
 
-    vector<string> Permutation(string str){
-        // 字符串的排列
-        string end;
-        vector<string> result;
-        end.push_back(str.back());
-        str.pop_back();
-        PermutationHelp(str, end, result);
-    }
-    void PermutationHelp(string start, string end, vector<string> &res){
-        if(start.size()==1){
-            res.push_back(start+end);
-        }
-    }
+    // vector<string> Permutation(string str){
+    //     // 字符串的排列
+    //     string end;
+    //     vector<string> result;
+    //     end.push_back(str.back());
+    //     str.pop_back();
+    //     PermutationHelp(str, end, result);
+    // }
+    // void PermutationHelp(string start, string end, vector<string> &res){
+    //     if(start.size()==1){
+    //         res.push_back(start+end);
+    //     }
+    // }
 
     bool duplicate(int numbers[], int length, int* duplication) {
         // 数组中重复的数字

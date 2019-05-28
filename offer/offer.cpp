@@ -5,6 +5,7 @@
 #include<stack>
 #include<string.h>
 #include<queue>
+#include<map>
 using namespace std;
 
 struct ListNode {
@@ -101,6 +102,22 @@ public:
             n >>= 1;
         }
         return exponent>0? res:(1/res);
+    }
+
+    double power2(double base, int exponent){
+        if(exponent==0)
+            return 1;
+        if(exponent==1)
+            return base;
+        bool isNegative = true;
+        if(exponent<0){
+            exponent = -exponent;
+            isNegative = false;
+        }
+        double pow = Power(base*base, exponent/2);
+        if(exponent%2!=0)
+            pow *= base;
+        return isNegative? pow:(1/pow);
     }
 
     void reOrderArray(vector<int> &array) {
@@ -290,7 +307,7 @@ public:
         return judge(sequence, 0, len-1);
     }
 
-    void FindPath1(vector<vector<int>> &result, vector<int> &arr, TreeNode* root, int num){
+    private: void FindPath1(vector<vector<int>> &result, vector<int> &arr, TreeNode* root, int num){
         if(root==NULL)
             return;        
         arr.push_back(root->val);
@@ -388,6 +405,34 @@ public:
     //         res.push_back(start+end);
     //     }
     // }
+    vector<string> Permutation(string str){
+        // 字符串的排列
+        vector<string> result;
+        if(str.empty()) return result;
+
+        PermutationHelp(str, result, 0);
+
+        sort(result.begin(), result.end());
+
+        return result;
+    }
+    void PermutationHelp(string str, vector<string> &res, int begin){
+        if(begin==str.size()-1){
+            if(find(res.begin(), res.end(), str) == res.end()){
+                // 保证没有重复元素
+                res.push_back(str);
+            }
+        }
+        else{
+            for(int i=begin;i<str.size();i++){
+                // 循环里面套递归
+                swap(str[i], str[begin]);
+                PermutationHelp(str, res, begin+1);
+                swap(str[i], str[begin]);
+            }
+        }
+    }
+ 
 
     bool duplicate(int numbers[], int length, int* duplication) {
         // 数组中重复的数字
@@ -567,6 +612,7 @@ public:
     }
 
     bool hasPath(char* matrix, int rows, int cols, char* str){
+        // 矩阵中的路径
         vector<bool> flag(rows*cols, false);
         for(int i=0;i<rows;i++){
             for(int j=0;j<cols;j++){
@@ -591,17 +637,325 @@ public:
         flag[index] = false;
         return false;
     }
+    int movingCount(int threshold, int rows, int cols){
+        // 机器人的运动范围
+        vector<bool> flag(rows*cols, false);
+        return moving(rows, cols, 0, 0, flag, threshold);
+    }   
+    int moving(int rows, int cols, int i, int j, vector<bool> &flag, int threshold){
+        // 传入引用，否则会使更改不能生效
+        int index = i * cols + j;
+        int sum = compute_sum(i, j);
+        if(i<0 || j<0 || i>=rows || j>=cols || flag[index]==true || sum>threshold){
+            return 0;
+        }
+        flag[index] = true;
+        return moving(rows, cols, i-1, j, flag, threshold)
+            + moving(rows, cols, i+1, j, flag, threshold)
+            + moving(rows, cols, i, j-1, flag, threshold)
+            + moving(rows, cols, i, j+1, flag, threshold)
+            + 1;
+    }
+    int compute_sum(int i, int j){
+        int sum=0;
+        while(i>0){
+            sum += i%10;
+            i = i/10;
+        }
+        while(j>0){
+            sum += j%10;
+            j = j/10;
+        }
+        return sum;
+    }
 
-    
-    
+    int integerBreak(int n){
+        // 整数拆分
+        int result = 1;
+        if(n<3){
+            return 1;
+        }
+        if(n==3)
+            return 2;
+        while(n>4){
+            result *= 3;
+            n -= 3;
+        }
+        return n*result;
+    }
+
+    void printToMaxOfNDigits(int n){
+        // 打印从 1 到最大的 n 位数
+        
+    }
+
+    int MoreThanHalfNum_Solution(vector<int> numbers) {
+        // 数组中出现次数超过一半的数字
+        map<int, int> mp;
+        int result = 0;
+        int len = numbers.size();
+        if(len==1)
+            return 1;
+        for(int i=0;i<len;i++){
+            mp[numbers[i]]++;
+            if(mp[numbers[i]]>len/2){
+                result = numbers[i];
+                break;
+            }
+        }
+        return result;
+    }
+
+    int FindGreatestSumOfSubArray(vector<int> array) {
+        // 连续字数组的最大和
+        vector<int> result;
+        if(array.empty())
+            return 0;
+        result.push_back(array[0]);
+        for(int i=1;i<array.size();i++){
+            result.push_back(max(result[i-1]+array[i], array[i]));
+        }
+        int res=result[0];
+        for(int i=0;i<result.size();i++){
+            if(result[i]>res)
+                res = result[i];
+        }
+        return res;
+    }   
+
+    int NumberOf1Between1AndN_Solution(int n){
+        // 整数中1出现的次数
+        int ones = 0;
+        for (long long m = 1; m <= n; m *= 10) {
+            int a = n/m, b = n%m;
+            ones += (a + 8) / 10 * m + (a % 10 == 1) * (b + 1);
+        }
+        return ones;
+    }
+
+    static bool cmp(int a, int b){
+        string A = "";
+        string B = "";
+        A += to_string(a);
+        A += to_string(b);
+        B += to_string(b);
+        B += to_string(a);
+
+        return A<B;
+    }
+    string PrintMinNumber(vector<int> numbers) {
+        // 把数组排成最小的数
+        // to_string将整数转化为字符串，sort的第三个参数定义比较规则，需要设置成静态函数
+        string result = "";
+        sort(numbers.begin(), numbers.end(), cmp);
+        for(int i=0;i<numbers.size();i++){
+            result += to_string(numbers[i]);
+        }
+        return result;
+    }    
+
+    int GetUglyNumber_Solution(int index) {
+        // 丑数
+        if(index<7) return index;
+        vector<int> arr;
+        int p2=0, p3=0, p5=0, newNum = 1;
+        arr.push_back(newNum);
+        while(arr.size() < index){
+            newNum = min(min(arr[p2]*2, arr[p3]*3), arr[p5]*5);
+            if(arr[p2] * 2 == newNum) p2++;
+            if(arr[p3] * 3 == newNum) p3++;
+            if(arr[p5] * 5 == newNum) p5++;
+            arr.push_back(newNum);
+        }
+        return newNum;
+    }
+
+    int FirstNotRepeatingChar(string str) {
+        // 第一个只出现一次的字符
+        map<char, int> mp;
+        for(int i=0;i<str.size();i++){
+            mp[str[i]]++;
+        }
+        for(int i=0;i<str.size();i++){
+            if(mp[str[i]]==1)
+                return i;
+        }
+        return -1;
+    }    
+
+    int InversePairs(vector<int> data){
+        // 数组中的逆序对，o(n^2)算法
+        // int result;
+        // for(int i=0;i<data.size()-1;i++){
+        //     for(int j=i+1;j<data.size();j++){
+        //         if(data[i]>data[j])
+        //             result++;
+        //     }
+        // }        
+        // return result % 1000000007;
+        if(data.size()==0){
+            return 0;
+        }
+        vector<int> copy;
+        for(int i=0;i<data.size();i++){
+            copy.push_back(data[i]);
+        }
+        int result = InversePairsCore(data, copy, 0, data.size()-1);
+        return result;
+    }
+
+    private: 
+    int InversePairsCore(vector<int> &data, vector<int> &copy, int low, int high){
+        if(low==high){
+            return 0;
+        }
+        int mid = (low+high) >> 1;
+        int left = InversePairsCore(data, copy, low, mid);
+        int right = InversePairsCore(data, copy, mid+1, high);
+        int count = 0;
+        int i = mid;
+        int j = high;
+        int locCopy = high;
+        while(i>=low && j>mid){
+            if(data[i]>data[j]){
+                count += j - mid;
+                copy[locCopy--] = data[i--];
+                if(count>=1000000007)
+                    count %= 1000000007;
+            }
+            else{
+                copy[locCopy--] = data[j--];
+            }
+        }
+        for(;i>=low;i--){
+            copy[locCopy--] = data[i];
+        }
+        for(;j>mid;j--){
+            copy[locCopy--] = data[j];
+        }
+        for(int s=low;s<=high;s++){
+            data[s] = copy[s];
+        }
+        return (left + right + count) % 1000000007;
+    }
+    ListNode* FindFirstCommonNode( ListNode* pHead1, ListNode* pHead2) {
+        // 两个链表的第一个公共结点
+        ListNode *p1 = pHead1;
+        ListNode *p2 = pHead2;
+        while(p1!=p2){
+            p1 = (p1==NULL ? pHead2 : p1->next);
+            p2 = (p2==NULL ? pHead1 : p2->next);
+        }
+        return p1;
+    }
+    public: 
+    int GetNumberOfK(vector<int> data ,int k) {
+        // 数字在排序数组中出现的次数
+        int low = getLower(data, k);
+        int up = getUper(data, k);
+        return up - low;
+    }   
+    private:
+    int getLower(vector<int> &data, int k){
+        int start = 0, end = data.size() - 1;
+        int mid = (start + end) >> 1;
+        while(start <= end){
+            if(data[mid] >= k){
+                end = mid - 1;
+            }
+            else{
+                start = mid + 1;
+            }
+            mid = (start + end) >> 1;
+        }
+        return mid;
+    }
+    int getUper(vector<int> &data, int k){
+        int start = 0, end = data.size() - 1;
+        int mid = (start + end) >> 1;
+        while(start <= end){
+            if(data[mid] > k){
+                end = mid - 1;
+            }
+            else{
+                start = mid + 1;
+            }
+            mid = (start + end) >> 1;
+        }
+        return mid;
+    }
+    public:
+    int TreeDepth(TreeNode* pRoot){
+        // 二叉树深度
+        if(pRoot==NULL)
+            return 0;
+        return max(TreeDepth(pRoot->left) + 1, TreeDepth(pRoot->right) + 1);
+    }
+    bool IsBalanced_Solution(TreeNode* pRoot){
+        // 平衡二叉树
+        if(pRoot==NULL)
+            return true;
+        return abs(TreeDepth(pRoot->left)-TreeDepth(pRoot->right))<=1 && 
+        IsBalanced_Solution(pRoot->left) && IsBalanced_Solution(pRoot->right);
+    }
+    // void FindNumsAppearOnce(vector<int> data,int* num1,int *num2) {
+    //     // 数组中只出现一次的数字
+    //     map<int, int> mp;
+    //     for(int i=0;i<data.size();i++){
+    //         mp[data[i]]++;
+    //     }
+    //     int num=0;
+    //     for(int i=0;i<data.size();i++){
+    //         if(mp[data[i]]==1){
+    //             if(num==0){
+    //                 *num1 = data[i];
+    //                 num++;
+    //             }
+    //             else{
+    //                 *num2 = data[i];
+    //             }
+    //         }
+    //     }
+    // }
+    public:
+    void FindNumsAppearOnce(vector<int> data,int* num1,int *num2) {
+        // 使用异或
+        if(data.size()<2)
+            return;
+        int temp = data[0];
+        for(int i=1;i<data.size();i++){
+            temp ^= data[i];    // 获取数组异或结果
+        }
+        if(temp==0)
+            return;
+        int index=0;
+        while((temp & 1) == 0){        
+            // 获取temp二进制中第一个1的数
+            temp >>= 1;
+            ++index;
+        }
+        *num1 = *num2 = 0;
+        for(int i=0;i<data.size();i++){
+            if(IsBit(data[i], index)){
+                *num1^=data[i];
+            }
+            else{
+                *num2^=data[i];
+            }
+        }
+    }   
+    private:
+    bool IsBit(int num, int index){
+        num = num>>index;
+        return (num&1);
+    }
 };
-
-
 
 int main() {
     Solution S1;
     vector<int> num;
-    num = {2, 3, 1, 0, 2, 5};
+    int num1, num2;
+    num = {1, 1, 1, 1, 4, 6};
     char matrix[] = "ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS";  // 可赋值
     // char *matrix = "ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS";  // 不可赋值
     char str[]="SLHECCEIDEJFGGFIE";
@@ -618,7 +972,19 @@ int main() {
     // cout<<S1.duplicate(numbers, 5, a)<<' '<<a[0]<<endl;
     // cout<<S1.VerifySquenceOfBST(num)<<endl;
     // cout<<S1.Fibonacci(40)<<endl;
-
-
+    // cout<<S1.movingCount(9, 5, 5)<<endl;
+    // cout<<S1.integerBreak(4)<<endl;
+    // vector<string> res = S1.Permutation("abc");
+    // cout<<S1.MoreThanHalfNum_Solution(num)<<endl;
+    // cout<<S1.FindGreatestSumOfSubArray(num)<<endl;
+    // cout<<S1.PrintMinNumber(num)<<endl;
+    // cout<<S1.GetUglyNumber_Solution(19)<<endl;
+    // cout<<S1.InversePairs(num)<<endl;
+    // cout<<S1.GetNumberOfK(num, 4)<<endl;
+    // S1.FindNumsAppearOnce(num, &num1, &num2);
+    while(scanf("%d", &num1)){
+        scanf("%d", &num2);
+        cout<<(num1 & num2)<<endl;
+    }
     return 0;
 }

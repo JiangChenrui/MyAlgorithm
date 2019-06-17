@@ -936,13 +936,135 @@ public:
         num = num>>index;
         return (num&1);
     }
+    public:
+    vector<vector<int>> FindContinuousSequence(int sum){
+        vector<vector<int>> result;
+        int left = 1, right = 2;
+        while(left<right){
+            int cur = (left + right) * (right - left + 1) / 2;
+            if(cur == sum){
+                vector<int> temp;
+                for(int i=left;i<=right;i++){
+                    temp.push_back(i);
+                }
+                result.push_back(temp);
+                right++;
+            }
+            else if(cur < sum){
+                right++;
+            }
+            else{
+                left++;
+            }
+        }
+        return result;
+    }
+    vector<int> FindNumbersWithSum(vector<int> array, int num){
+        int left = 0;
+        int right = array.size() - 1;
+        vector<int> result;
+        if(array.size()<2)
+            return result;
+        while(left>=0 && right<array.size()){
+            int cur = array[left] + array[right];
+            if(cur==num){
+                result.push_back(array[left]);
+                result.push_back(array[right]);
+                break;
+            }
+            else if(cur<num){
+                left++;
+            }
+            else{
+                right--;
+            }
+        }
+        return result;
+    }
+    string LeftRotateString(string str, int n){
+        if(str.size() < n)
+            return "";
+        reverse(str.begin(), str.begin() + n);
+        reverse(str.begin() + n, str.end());
+        reverse(str.begin(), str.end());
+        return str;
+    }
+    bool IsContinuous(vector<int> numbers){
+        map<int, int> mp;
+        int min=14, max=-1;
+        int len = numbers.size();
+        if(len==0)
+            return false;
+        for(int i=0;i<len;i++){
+            if(numbers[i]==0)
+                continue;
+            mp[numbers[i]]++;
+            if(mp[numbers[i]]>1){
+                return false;
+            }
+            if(numbers[i]>max){
+                max = numbers[i];
+            }
+            if(numbers[i]<min){
+                min = numbers[i];
+            }
+        }
+        if(max-min < len){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    int LastRemaining_Solution1(int n, int m){
+        if(m==0 || n==0)
+            return -1;
+        int *array = new int[n];
+        int i = -1, step = 0, count = n;
+        m = m % n;
+        while(count>0){
+            i++;
+            if(i>=n) i=0;
+            if(array[i] == -1) continue;
+            step++;
+            if(step==m){
+                array[i] = -1;
+                step = 0;
+                count--;
+            }
+        }
+        return i;
+    }
+    int LastRemaining_Solution(int n, int m){
+        if(m < 1 || n < 1){
+            return -1;
+        }
+        queue<int> temp;
+        for(int i=0;i<n;i++)
+            temp.push(i);
+        while(temp.size() != 1){
+            for(int i=0;i<m-1;i++){
+                int tmp = temp.front();
+                temp.pop();
+                temp.push(tmp);
+            }
+            temp.pop();
+        }
+        return temp.front();
+    }
+    int Sum_Solution(int n) {
+        int sum = n;
+        bool ans = (n>0) && ((sum+=Sum_Solution(n-1))>0);
+        return sum;
+    }    
+    
 };
 
 int main() {
     Solution S1;
     vector<int> num;
     int num1, num2;
-    num = {1, 1, 1, 1, 4, 6};
+    num = {2, 2, 0, 0, 0, 3};
     char matrix[] = "ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS";  // 可赋值
     // char *matrix = "ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS";  // 不可赋值
     char str[]="SLHECCEIDEJFGGFIE";
@@ -969,9 +1091,15 @@ int main() {
     // cout<<S1.InversePairs(num)<<endl;
     // cout<<S1.GetNumberOfK(num, 4)<<endl;
     // S1.FindNumsAppearOnce(num, &num1, &num2);
-    while(scanf("%d", &num1)){
-        scanf("%d", &num2);
-        cout<<(num1 & num2)<<endl;
-    }
+    // while(scanf("%d", &num1)){
+    //     scanf("%d", &num2);
+    //     cout<<(num1 & num2)<<endl;
+    // }
+    // vector<vector<int>> result = S1.FindContinuousSequence(100);
+    // vector<int> result = S1.FindNumbersWithSum(num, 15);
+    // cout<<S1.LeftRotateString("abcdefg", 2);
+    // cout<<S1.IsContinuous(num)<<endl;
+    // cout<<S1.LastRemaining_Solution(10, 2)<<endl;
+    cout<<S1.Sum_Solution(20)<<endl;
     return 0;
 }

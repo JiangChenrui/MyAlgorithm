@@ -392,6 +392,19 @@ public:
         ConvertHelp(cur->right, pre);
     }
 
+    // vector<string> Permutation(string str){
+    //     // 字符串的排列
+    //     string end;
+    //     vector<string> result;
+    //     end.push_back(str.back());
+    //     str.pop_back();
+    //     PermutationHelp(str, end, result);
+    // }
+    // void PermutationHelp(string start, string end, vector<string> &res){
+    //     if(start.size()==1){
+    //         res.push_back(start+end);
+    //     }
+    // }
     vector<string> Permutation(string str){
         // 字符串的排列
         vector<string> result;
@@ -936,6 +949,7 @@ public:
         num = num>>index;
         return (num&1);
     }
+<<<<<<< HEAD
     public:
     vector<vector<int>> FindContinuousSequence(int sum){
         vector<vector<int>> result;
@@ -1058,16 +1072,59 @@ public:
         return sum;
     }    
     
+=======
+    // public:
+    // static bool cmp(int a, int b){
+    //     // 需要添加静态标识
+    //     string A="";
+    //     string B="";
+    //     A += to_string(a);
+    //     A += to_string(b);
+    //     B += to_string(b);
+    //     B += to_string(a);
+    //     return A<B;
+    // }
+    // string PrintMinNumber(vector<int> numbers) {
+    //     string result="";
+    //     sort(numbers.begin(), numbers.end(), cmp);
+    //     for(int i=0;i<numbers.size();i++){
+    //         result += to_string(numbers[i]);
+    //     }
+    //     return result;
+    // } 
+    public:
+    string ReverseSentence(string str){
+        string res="", tmp="";
+        for(int i=0;i<str.size();i++){
+            if(str[i]==' '){
+                res = " " +  tmp + res;
+                tmp = "";
+            }
+            else{
+                tmp += str[i];
+            }
+        }
+        if(tmp.size()){
+            res = tmp + res;
+        }
+        return res;
+    }
+>>>>>>> 04a5e409eb273c47b4dd6b7add52333df0d7cf08
 };
 
 int main() {
     Solution S1;
     vector<int> num;
     int num1, num2;
+<<<<<<< HEAD
     num = {2, 2, 0, 0, 0, 3};
     char matrix[] = "ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS";  // 可赋值
+=======
+    num = {3, 321, 32};
+    char matrix[] = "student. a am I";  // 可赋值
+>>>>>>> 04a5e409eb273c47b4dd6b7add52333df0d7cf08
     // char *matrix = "ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS";  // 不可赋值
-    char str[]="SLHECCEIDEJFGGFIE";
+    // char str[]="SLHECCEIDEJFGGFIE";
     // cout<<S1.hasPath(matrix, 5, 8, str)<<endl;
     // int numbers[]={2, 1, 3, 0, 4};
     // int *a;
@@ -1095,11 +1152,16 @@ int main() {
     //     scanf("%d", &num2);
     //     cout<<(num1 & num2)<<endl;
     // }
+<<<<<<< HEAD
     // vector<vector<int>> result = S1.FindContinuousSequence(100);
     // vector<int> result = S1.FindNumbersWithSum(num, 15);
     // cout<<S1.LeftRotateString("abcdefg", 2);
     // cout<<S1.IsContinuous(num)<<endl;
     // cout<<S1.LastRemaining_Solution(10, 2)<<endl;
     cout<<S1.Sum_Solution(20)<<endl;
+=======
+    // cout<<S1.PrintMinNumber(num)<<endl;
+    cout<<S1.ReverseSentence(matrix)<<endl;
+>>>>>>> 04a5e409eb273c47b4dd6b7add52333df0d7cf08
     return 0;
 }

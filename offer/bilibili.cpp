@@ -1,11 +1,12 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
-#include<cmath>
-#include<stack>
-#include<string.h>
-#include<queue>
-#include<map>
+#include <iostream>
+#include <stdio.h>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <stack>
+#include <string.h>
+#include <queue>
+#include <map>
 using namespace std;
 
 string question1(int num){
@@ -66,7 +67,7 @@ int question3(string str){
     }
 }
 
-int question4(int n, int m, int id, vector<vector<int>> &num){
+int question4(int n, int m, int id, vector<vector<int> > &num){
     int result;
     vector<int> com;
     com.push_back(id);
@@ -84,7 +85,7 @@ int question4(int n, int m, int id, vector<vector<int>> &num){
 int main(){
     int n, m, id;
     cin>>n, id, m;
-    vector<vector <int>> num;
+    vector<vector <int> > num;
     for(int i=0; i<m; i++){
         scanf("%d,%d", &num[i][0], &num[i][1]);
     }

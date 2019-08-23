@@ -138,6 +138,7 @@ public:
     }
 
     ListNode* ReverseList(ListNode* pHead) {
+        // 链表反转
         ListNode *pre, *now;
         pre = pHead;
         now = NULL;
@@ -152,8 +153,8 @@ public:
         return now;
     }
 
-    ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
-    {
+    ListNode* Merge(ListNode* pHead1, ListNode* pHead2) {
+        // 两个有序链表排序为一个链表
         ListNode *pHead, *pNode;
         if(pHead1->val > pHead2->val){
             pHead = pHead2;

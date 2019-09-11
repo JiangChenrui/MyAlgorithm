@@ -42,6 +42,11 @@ struct TreeLinkNode{
     }
 };
 
+struct Point{
+    int x;
+    int y;
+}
+
 class Solution{
 public:
     int NumberOf1(int n) {
@@ -315,11 +320,11 @@ public:
         if(!root->left && !root->right && num-root->val == 0){
             result.push_back(arr);
         }
-        else if(num-root->val <0){
+        else if(num-root->val < 0){
             arr.pop_back();
             return;
         }
-        else if(num-root->val >0){
+        else if(num-root->val > 0){
             FindPath1(result, arr, root->left, num-root->val);
             FindPath1(result, arr, root->right, num-root->val);
         }
@@ -500,7 +505,6 @@ public:
             s.pop();
         }
         return result;
-
     }
     // vector<int> result;
     // vector<int> printListFromTailToHead(ListNode* head){
@@ -985,6 +989,97 @@ public:
             res = tmp + res;
         }
         return res;
+    }
+    int money_100(){
+        // 将100块钱用1,2,5,10兑换，总共有多少种方法
+        const int N = 100;
+        int dimst[] = {1, 2, 5, 10};
+        int arr[N+1] = { 1 };
+        for(int i=0; i<sizeof(dimst)/sizeof(int); i++){
+            for(int j=dimst[i]; j<=N; j++){
+                arr[j] += arr[j - dimst[i]];
+            }
+        }
+        return arr[100];
+    }
+    bool IsOddNumber(int data){
+        // 判断是否是奇数
+        return data & 1 == 1;
+    }
+    void OddvenSort(int *pData, int length){
+        // 数组奇偶兑换，将奇数排在前面，偶数排在后面
+        // 使用一前一后指针进行
+        int *pStart = pData;
+        int *pEnd = pData + length - 1;
+
+        while(pStart < pEnd){
+            if(IsOddNumber(*pStart)){
+                pStart++;
+            }
+            else if(!IsOddNumber(*pEnd)){
+                pEnd--;
+            }
+            else{
+                swap(*pStart, *pEnd);
+            }
+        }
+    }
+    void OddEventSort2(int *pData, int length){
+        int i = -1;
+        for(int j = i + 1; j < length; j++){
+            if(IsOddNumber(pData[j])){
+                i += 1;
+                swap(pData[i], pData[j]);
+            }
+        }
+        swap(pData[i+1], pData[length-1]);
+    }
+
+    int run(TreeNode *root) {
+        // 求二叉树的最小深度
+        if(!root){
+            return 0;
+        }
+        int l = run(root->left);
+        int r = run(root->right);
+        if(l==0 || r==0){
+            return 1+l+r;
+        }
+        return 1+min(l, r);
+    }
+
+    int evalRPN(vector<string> &tokens){
+        stack<int> numbers;
+        for(auto token : tokens){
+            if(token == "+" || token == "-" || token == "*" || token == "/"){
+                int a, b, res;
+                b = numbers.top();
+                numbers.pop();
+                a = numbers.top();
+                numbers.pop();
+                if(token == "+")
+                    res = a + b;
+                else if(token == "-")
+                    res = a - b;
+                else if(token == "*")
+                    res = a * b;
+                else
+                    res = a / b;
+                numbers.push(res);
+            }
+            else{
+                stringstream ss;
+                ss<<token;
+                int temp;
+                ss>>temp;
+                numbers.push(temp); 
+            }
+        }
+        return numbers.top();
+    }
+
+    ListNode *sortList(ListNode *head) {
+        
     }
 };
 

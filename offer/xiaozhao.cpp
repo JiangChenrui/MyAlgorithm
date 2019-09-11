@@ -229,3 +229,37 @@ void operate(int n, vector<int> nums){
     }
 }
 
+
+void Three_num_flag(vector<int> &num){
+    // 三色国旗问题
+    int begin = 0;
+    int end = num.size() - 1;
+    int current = 0;
+    while(current <= end){
+        if(num[current] == 0){
+            swap(num[current], num[begin]);
+            current++;
+            begin++;
+        }
+        else if(num[current] == 1){
+            current++;
+        }
+        else{
+            swap(num[current], num[end]);
+            end--;
+        }
+    }
+}
+
+
+int main(){
+    int number[] = {0, 0, 1, 1, 1, 2, 0, 2, 1, 2};
+    int length = sizeof(number)/sizeof(int);
+    cout<<length<<endl;
+    vector<int> arr;
+    for(int i=0;i<length;i++){
+        arr.push_back(number[i]);
+    }
+    Three_num_flag(arr);
+    return 0;
+}

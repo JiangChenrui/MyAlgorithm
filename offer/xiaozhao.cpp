@@ -163,11 +163,11 @@ int bfs(int startX, int startY){
     }
     return 0;
 }
-int main(){
+void migon(){
     int i, j;
     while(scanf("%d%d", &N, &M)!=EOF){
         for(i=0;i<N;i++)
-            scanf("%s", G[i]);
+            cin>>G[i];
         memset(book, 0, sizeof(book));
         int flag=0;
         for(i=0;i<N;i++){
@@ -183,4 +183,100 @@ int main(){
             }
         }
     }
+}
+
+// 彩色砖块
+int colorBatten(){
+    string str;
+    cin>>str;
+    int res=0;
+    sort(str.begin(), str.end());
+    str.erase(unique(str.begin(), str.end()), str.end());
+    if(str.size()==1){
+        res = 1;
+    }
+    else if(str.size()==2)
+        res = 2;
+    cout<<res<<endl;
+    return 0;
+}
+
+// 交错01串
+int swap_zero_one(string &str){
+    int len = str.size();
+    if(len<=0)
+        return 0;
+    int max = 1, swap = 1;
+    for(int i=1;i<len;i++){
+        if(str[i]!=str[i-1]){
+            swap++;
+            if(swap>max)
+                max = swap;            
+        }
+        else{
+            swap = 1;
+        }
+    }  
+    return max;
+}
+
+// 操作序列
+void operate(int n, vector<int> nums){
+    if(n==1)
+        cout<<nums[0]<<endl;
+    if(n%2==0){
+        for(long long i=n-1;i>=0;i-=2){
+            cout<<nums[i]<<' ';
+        }
+        cout<<nums[0];
+        for(long long i=2;i<n;i+=2){
+            cout<<' '<<nums[i];
+        }
+        cout<<endl;
+    }
+    else{
+        for(long long i=n-1;i>=0;i-=2){
+            cout<<nums[i]<<' ';
+        }
+        cout<<nums[1];
+        for(long long i=3;i<n;i+=2){
+            cout<<' '<<nums[i];
+        }
+        cout<<endl;
+    }
+}
+
+
+void Three_num_flag(vector<int> &num){
+    // 三色国旗问题
+    int begin = 0;
+    int end = num.size() - 1;
+    int current = 0;
+    while(current <= end){
+        if(num[current] == 0){
+            swap(num[current], num[begin]);
+            current++;
+            begin++;
+        }
+        else if(num[current] == 1){
+            current++;
+        }
+        else{
+            swap(num[current], num[end]);
+            end--;
+        }
+    }
+}
+
+
+int main(){
+    int number[] = {0, 0, 1, 1, 1, 2, 0, 2, 1, 2};
+    int length = sizeof(number)/sizeof(int);
+    cout<<length<<endl;
+    vector<int> arr;
+    for(int i=0;i<length;i++){
+        arr.push_back(number[i]);
+    }
+    Three_num_flag(arr);
+    return 0;
 }

@@ -9,6 +9,23 @@
 #include<limits.h>
 using namespace std;
 
+string PrintMinNumber(vector<int> numbers) {
+    string result="";
+    sort(numbers.begin(), numbers.end(), cmp);
+    for(int i=0;i<numbers.size();i++){
+        result += to_string(numbers[i]);
+    }
+    return result;
+}
+static bool cmp(int a, int b){
+    string A="";
+    string B="";
+    A += to_string(a);
+    A += to_string(b);
+    B += to_string(b);
+    B += to_string(a);
+    return A<B;
+}
 long long MaxProduct(vector<long long> &array){
     if(array.size()<3)
         return 0;

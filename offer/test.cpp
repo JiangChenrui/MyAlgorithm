@@ -100,23 +100,25 @@ bool checkSpecialChar(string str){
 }
 
 bool checkUrl(std::string str) {
-    // std::string cm = {"^rtsp:\/\/([a-z]{0,10}:.{0,10}@)?(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$"};
-    // std::string cm1 = {"^rtsp:\/\/([a-z]{0,10}:.{0,10}@)?(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]):[0-9]{1,5}"};
-    // std::string cm2 = {"^rtsp:\/\/([a-z]{0,10}:.{0,10}@)?(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\/"};
-    std::string cm3 = {"^rtsp+://[^s].*"};
+    // std::string cm = {"^rtsp:\/\/([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).*"};
+    // std::string cm1 = {"^rtsp+://([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]):[0-9]{1,5}"};
+    // std::string cm2 = {"^rtsp+://([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])"};
+    std::string cm3 = {"^rtsp+://([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).*"};
     // std::regex reg(cm);
     // std::regex reg1(cm1);
     // std::regex reg2(cm2);
     std::regex reg3(cm3);
-    // return (std::regex_match(str, reg)||std::regex_match(str, reg1)||std::regex_match(str, reg2));
+    // cout<<regex_match(str, reg) <<' '<< regex_match(str, reg1) <<' '<<regex_match(str, reg2)<<endl;
+    // cout<<regex_match(str, reg3)<<endl;
+    // return (std::regex_match(str, reg) || std::regex_match(str, reg1) || std::regex_match(str, reg2));
     return std::regex_match(str, reg3);
 }
 
 
 int main(){
     string s1, s2;
-    s1 = "rtsp://admin:boyun2017@192.168.4.168:8554/channel21";
-    s2 = "hello";
+    s1 = "rtsp://admin:boyun2017@192.168.4.168:8554/channel121";
+    s2 = "rtsp://admin:boyun2017@192.168.1.156:1223";
     cout<<checkUrl(s1)<<endl;
     cout<<checkUrl(s2)<<endl;
     return 0;

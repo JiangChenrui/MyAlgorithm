@@ -1,7 +1,8 @@
-#include<map>
-#include<iostream>
-#include<algorithm>
-#include<vector>
+#include <map>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
 const int maxn = 99999, INF=-0x7f7f7f7f;
 using namespace std;
 vector<int> topKFrequent(vector<int>& nums, int k) {

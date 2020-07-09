@@ -1,6 +1,6 @@
-#include<iostream>
-#include<vector>
-#include"sortAlgorithm.h"
+#include <iostream>
+#include <vector>
+#include "sortAlgorithm.h"
 
 using namespace std;
 int main() {

@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "iosfwd": "cpp"
+    },
+    "code-runner.executorMap": {
+        "cpp": " cd $dir && g++ $fileName -o D:/workspace/MyAlgorithm/exe/$fileNameWithoutExt.exe && D:/workspace/MyAlgorithm/exe/$fileNameWithoutExt.exe "
+    } // 设置code runner的命令行
+}

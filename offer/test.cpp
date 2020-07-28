@@ -1,7 +1,7 @@
-#include<iostream>
-#include<algorithm>
-#include<vector>
+#include <algorithm>
+#include <iostream>
 #include <regex>
+#include <vector>
 using namespace std;
 
 // int main(){
@@ -41,7 +41,7 @@ using namespace std;
 //         for(int i=1;i<n;i++){
 //             if(min<=0){
 //                 if(number[i]>0)
-//                     min = number[i];          
+//                     min = number[i];
 //             }
 //             else{
 //                 if(number[i]<min && number[i]>0){
@@ -80,7 +80,7 @@ using namespace std;
 //                 min = number[i];
 //                 break;
 //             }
-//         } 
+//         }
 //         cout<<min<<endl;
 //         for(int i=temp;i<n;i++){
 //             number[i] -= min;
@@ -91,44 +91,60 @@ using namespace std;
 //     return 0;
 // }
 
-int checkSpecialChar(string str){
-    string cm{".*[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？].*"};
+int checkSpecialChar(string str) {
+    string cm{
+        ".*[`~!@#$%^&*()+=|{}':;',\\[\\].<>/"
+        "?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？].*"};
     // string cm{".*h.*"};
     string cm1{".*[     ].*"};
     regex reg(cm);
     regex reg1(cm1);
     int res = 0;
-    if(regex_match(str, reg)){
+    if (regex_match(str, reg)) {
         res = 1;
     }
-    if(regex_match(str, reg1)){
+    if (regex_match(str, reg1)) {
         res = 2;
     }
     return res;
 }
 
 bool checkUrl(std::string str) {
-    std::string cm = {"^rtsp+://([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).*"};
-    std::string cm1 = {"^rtsp+://([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]):[0-9]{1,5}"};
-    std::string cm2 = {"^rtsp+://([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])"};
-    std::string cm3 = {"^rtsp+://([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).*"};
+    std::string cm = {
+        "^rtsp+://"
+        "([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|"
+        "1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{"
+        "1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).*"};
+    std::string cm1 = {
+        "^rtsp+://"
+        "([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|"
+        "1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{"
+        "1,2}|1\\d\\d|2[0-4]\\d|25[0-5]):[0-9]{1,5}"};
+    std::string cm2 = {
+        "^rtsp+://"
+        "([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|"
+        "1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).(\\d{"
+        "1,2}|1\\d\\d|2[0-4]\\d|25[0-5])"};
+    std::string cm3 = {
+        "^rtsp+://"
+        "([a-z]{0,10}:.{0,10}@)?(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]).*"};
     std::regex reg(cm);
     std::regex reg1(cm1);
     std::regex reg2(cm2);
     std::regex reg3(cm3);
-    // cout<<regex_match(str, reg) <<' '<< regex_match(str, reg1) <<' '<<regex_match(str, reg2)<<endl;
-    // cout<<regex_match(str, reg3)<<endl;
-    return (std::regex_match(str, reg) || std::regex_match(str, reg1) || std::regex_match(str, reg2));
+    // cout<<regex_match(str, reg) <<' '<< regex_match(str, reg1) <<'
+    // '<<regex_match(str, reg2)<<endl; cout<<regex_match(str, reg3)<<endl;
+    return (std::regex_match(str, reg) || std::regex_match(str, reg1) ||
+            std::regex_match(str, reg2));
     // return std::regex_match(str, reg3);
 }
 
-
-int main(){
+int main() {
     string s1, s2;
     s1 = "rtsp://admin:888888@192.168.4.149:554/ch01.264";
     s2 = "rtsp://admin:boyun2017@192.168.4.176:554";
     int res1 = checkUrl(s1);
     int res2 = checkUrl(s2);
-    cout<<res1<<" "<<res2<<endl;    
+    cout << res1 << " " << res2 << endl;
     return 0;
 }
